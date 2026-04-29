@@ -1,4 +1,4 @@
-const User = require("../models/User");
+const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
 /* REGISTER */
@@ -25,7 +25,6 @@ exports.register = async (req, res) => {
     });
 
     res.json("Registered successfully");
-
   } catch (err) {
     console.log(err);
     res.status(500).json("Server error");
@@ -51,7 +50,6 @@ exports.login = async (req, res) => {
         role: user.role,
       },
     });
-
   } catch (err) {
     console.log(err);
     res.status(500).json("Server error");

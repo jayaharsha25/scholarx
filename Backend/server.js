@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+require("dotenv").config(); // ✅ added
 
 const authRoutes = require("./routes/authRoutes");
 const researchRoutes = require("./routes/researchRoutes");
@@ -14,18 +15,17 @@ app.use(cors());
 app.use(express.json());
 
 /* ================= STATIC FILES ================= */
-// this is IMPORTANT for file viewing
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 /* ================= DATABASE ================= */
 mongoose
-  .connect("mongodb://127.0.0.1:27017/scholarx")
+  .connect(process.env.MONGO_URI) // ✅ FIXED (was localhost)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("DB Error:", err));
 
 /* ================= ROUTES ================= */
 app.use("/api/auth", authRoutes);
-app.use("/api/research", researchRoutes); // 🔥 this must be present
+app.use("/api/research", researchRoutes);
 app.use("/api/admin", adminRoutes);
 
 /* ================= TEST ROUTE ================= */
@@ -34,8 +34,8 @@ app.get("/", (req, res) => {
 });
 
 /* ================= SERVER ================= */
-const PORT = 5000;
+const PORT = process.env.PORT || 5000; // ✅ FIXED
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
