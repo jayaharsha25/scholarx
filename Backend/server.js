@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config(); // ✅ added
+require("dotenv").config(); // ✅ MUST
 
 const authRoutes = require("./routes/authRoutes");
 const researchRoutes = require("./routes/researchRoutes");
@@ -19,9 +19,12 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 /* ================= DATABASE ================= */
 mongoose
-  .connect(process.env.MONGO_URI) // ✅ FIXED (was localhost)
+  .connect(process.env.MONGO_URI) // ✅ use ENV only (no localhost here)
   .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log("DB Error:", err));
+  .catch((err) => {
+    console.error("DB Error:", err.message); // show real error
+    process.exit(1);
+  });
 
 /* ================= ROUTES ================= */
 app.use("/api/auth", authRoutes);
@@ -34,8 +37,7 @@ app.get("/", (req, res) => {
 });
 
 /* ================= SERVER ================= */
-const PORT = process.env.PORT || 5000; // ✅ FIXED
-
+const PORT = process.env.PORT || 5000; // ✅ required for Render
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
