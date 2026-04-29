@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://scholarx-backend-48t0.onrender.com"
 });
 
 // 🔥 attach user id automatically
